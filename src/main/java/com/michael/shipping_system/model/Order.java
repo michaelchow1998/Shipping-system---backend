@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order")
+@Table(name = "`orders`")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,14 +28,14 @@ public class Order {
     private Integer pickupLocationId;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pickup_location_name",referencedColumnName = "id")
+    @JoinColumn(name = "pickup_location",referencedColumnName = "id")
     private Location pickupLocation;
 
     @Column(name = "delivery_location_id")
     private Integer deliveryLocationId;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "delivery_location_name",referencedColumnName = "id")
+    @JoinColumn(name = "delivery_location",referencedColumnName = "id")
     private Location deliveryLocation;
 
     @Column(name = "created_date")
