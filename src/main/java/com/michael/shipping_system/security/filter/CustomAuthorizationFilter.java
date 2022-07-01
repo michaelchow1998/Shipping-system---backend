@@ -33,32 +33,39 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if(request.getServletPath().equals("/api/v1/login") || request.getServletPath().equals("/api/v1/token/refresh")
-        || request.getServletPath().equals("/api/v1/user/register") || request.getServletPath().equals("/api/v1/user/changepw")
+        || request.getServletPath().equals("/api/v1/guest/register") || request.getServletPath().equals("/api/v1/guest/changepw")
+        || request.getServletPath().equals("/api/v1/guest/orders/**")
         ){
-            log.info("ByPass CustomAuthorizationFilter");
+            //let the request and response keep going
             filterChain.doFilter(request,response);
         }else {
-            log.info("Doing CustomAuthorizationFilter Path: {}", request.getServletPath());
+
+            //get the AUTHORIZATION Header
             String authorizationHeader = request.getHeader(AUTHORIZATION);
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
                 try {
 
+                    //Create token
                     String token = authorizationHeader.substring("Bearer ".length());
                     Algorithm algorithm = Algorithm.HMAC256("shippingSigningKey".getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT= verifier.verify(token);
                     String username = decodedJWT.getSubject();
                     String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+
+                    //add roles to authorities
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(roles).forEach(role ->{
                         authorities.add(new SimpleGrantedAuthority(role));
                     });
+
+                    //create UsernamePasswordAuthenticationToken with username and authorities
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request,response);
-
                 }catch (Exception e){
 
+                    //send back error message and set in header
                     log.error("Error logging in: {}", e.getMessage());
                     response.setHeader("error",e.getMessage());
                     response.setStatus(FORBIDDEN.value());
@@ -70,6 +77,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 }
 
             }else {
+                //let the request and response keep going
                 filterChain.doFilter(request,response);
             }
         }

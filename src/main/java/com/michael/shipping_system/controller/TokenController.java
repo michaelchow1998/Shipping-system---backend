@@ -30,27 +30,36 @@ public class TokenController {
 
     private final UserService userService;
 
+    //JWT Token refresh
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+        //get AUTHORIZATION in header
         String authorizationHeader = request.getHeader(AUTHORIZATION);
+
+        //check authorization Header format
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("shippingSigningKey".getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT= verifier.verify(refresh_token);
+                Algorithm algorithm = Algorithm.HMAC256("shippingSigningKey".getBytes());       //create sign key
+                JWTVerifier verifier = JWT.require(algorithm).build();                          //create verifier
+                DecodedJWT decodedJWT= verifier.verify(refresh_token);                          //decode JWT
+
+                // Get User and create roles
                 String username = decodedJWT.getSubject();
                 User user = userService.getUser(username);
                 List<String> roles = new ArrayList<>();
                 roles.add(user.getRole());
+
+                //create access token
                 String access_token = JWT.create()
                         .withSubject(user.getUsername())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))     //One day
                         .withIssuer(request.getRequestURI())
                         .withClaim("roles",roles)
                         .sign(algorithm);
 
+                //send response with the tokens
                 Map<String,String> tokens = new HashMap<>();
                 tokens.put("access_token", access_token);
                 tokens.put("refresh_token", refresh_token);
@@ -60,6 +69,8 @@ public class TokenController {
             }catch (Exception e){
 
                 log.error("Error logging in: {}", e.getMessage());
+
+                //403 response error message
                 response.setHeader("error",e.getMessage());
                 response.setStatus(FORBIDDEN.value());
                 Map<String,String> error = new HashMap<>();

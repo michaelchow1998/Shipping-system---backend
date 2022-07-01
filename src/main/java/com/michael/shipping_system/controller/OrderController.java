@@ -28,21 +28,8 @@ public class OrderController {
 
     private final TrackingService trackingService;
 
-    @PostMapping("/shipping")
-    @PreAuthorize("hasAnyRole('ROLE_STAFF','ROLE_ADMIN')")
-    public ResponseEntity<?> shipping(@RequestBody @Valid RequestOrderCreate orderCreate) throws Exception{
-        try{
-            log.info("{}",orderCreate.getPickupLocationId());
-            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/orders/shipping").toUriString());
-            return ResponseEntity.created(uri).body(orderService.createOrder(orderCreate));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(e);
-        }
 
-    }
-
-
+    //ROLE_USER AND ROLE_ADMIN: GET orders related by username
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<List<Order>> searchAllOrdersRelated(@RequestBody User user){
@@ -56,33 +43,7 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/details")
-    public ResponseEntity<TrackingDetails> searchOrderDetail(@RequestBody TrackingDetails details){
-        log.info("getSearchId : {}", details.getSearchId());
-        TrackingDetails targetDetail = trackingService.findDetails(details.getSearchId());
-        if (targetDetail != null){
-            return ResponseEntity.status(HttpStatus.OK).body(targetDetail);
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-    }
-
-
-
-
-    @PostMapping("/{searchId}")
-    public ResponseEntity<Order> searchOrder(@RequestBody String searchId){
-       Order order = orderService.searchBySearchId(searchId);
-        if (order.getId() != null){
-            return ResponseEntity.status(HttpStatus.OK).body(order);
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-    }
-
-
+    //ROLE_USER AND ROLE_ADMIN: GET sent orders by username
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @PostMapping("/sent")
     public ResponseEntity<List<Order>> searchSendOrders(@RequestBody User user){
@@ -96,6 +57,7 @@ public class OrderController {
     }
 
 
+    //ROLE_USER AND ROLE_ADMIN: GET receipt orders by username
     @PostMapping("/receipted")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<List<Order>> searchReceiptOrders(@RequestBody User user){
@@ -108,6 +70,7 @@ public class OrderController {
         }
     }
 
+    //ROLE_USER AND ROLE_ADMIN: GET Finished orders by username
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @PostMapping("/finished")
     public ResponseEntity<List<Order>> searchAllFinishedOrdersRelated(@RequestBody User user){
@@ -119,6 +82,8 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    //ROLE_USER AND ROLE_ADMIN: GET Unfinished orders by username
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @PostMapping("/unfinished")
     public ResponseEntity<List<Order>> searchAllUnfinishedOrdersRelated(@RequestBody  User user){

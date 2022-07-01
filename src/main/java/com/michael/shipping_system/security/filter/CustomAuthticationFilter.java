@@ -34,6 +34,8 @@ public class CustomAuthticationFilter extends UsernamePasswordAuthenticationFilt
         this.authenticationManager =  authenticationManager;
 
     }
+
+    // check username and password
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try{
@@ -61,6 +63,7 @@ public class CustomAuthticationFilter extends UsernamePasswordAuthenticationFilt
     }
 
 
+    //when success send back JTS token
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException, IOException {
         User user = (User) authentication.getPrincipal();

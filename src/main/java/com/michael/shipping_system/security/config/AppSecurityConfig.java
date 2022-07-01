@@ -42,7 +42,10 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         customAuthticationFilter.setFilterProcessesUrl("/api/v1/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers( "/api/v1/login","/api/v1/token/refresh","/api/v1/user/register","/api/v1/user/changepw").permitAll();
+        http.authorizeRequests().antMatchers( "/api/v1/login","/api/v1/token/refresh",
+                "/api/v1/guest/register","/api/v1/guest/changepw",
+                "/api/v1/guest/orders/**"
+                ).permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

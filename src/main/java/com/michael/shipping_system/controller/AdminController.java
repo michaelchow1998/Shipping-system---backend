@@ -33,13 +33,14 @@ public class AdminController {
     private  LocationService locationService;
 
 
+    //Admin ROLE: CREATE location
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/locations")
     public ResponseEntity <Location> addLocation(@RequestBody Location location) throws Exception{
         List<Location> locations = locationService.getAllLocation();
         boolean contain = false;
         for (Location l : locations){
-            if(l.getName() == location.getName()){
+            if(l.getName().equals(location.getName())){
                 contain = true;
             }
         }
@@ -51,6 +52,7 @@ public class AdminController {
         }
     }
 
+    //Admin ROLE: READ User information
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("users/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username){
@@ -63,6 +65,7 @@ public class AdminController {
         }
     }
 
+    //Admin ROLE: READ all Users information
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUser(){
@@ -74,7 +77,7 @@ public class AdminController {
         }
     }
 
-
+    //Admin ROLE: READ all Orders information
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> getAllOrder(){
@@ -86,6 +89,7 @@ public class AdminController {
         }
     }
 
+    //Admin ROLE: READ Location by location id
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/locations/{locationId}")
     public ResponseEntity <Location> getLocation(@PathVariable Integer locationId){
@@ -97,6 +101,7 @@ public class AdminController {
         }
     }
 
+    //Admin ROLE: READ all Location information
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/locations")
     public ResponseEntity <List<Location>> getAllLocation(){
@@ -108,7 +113,7 @@ public class AdminController {
         }
     }
 
-
+    //Admin ROLE: Delete User by username
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/users/{username}")
     public void deleteUser(@PathVariable String username){
@@ -116,6 +121,7 @@ public class AdminController {
         log.info("{} deleted in db", username);
     }
 
+    //Admin ROLE: Delete Order by search id
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/orders/{searchId}")
     public void deleteOrder(@PathVariable String searchId){
@@ -124,22 +130,12 @@ public class AdminController {
         log.info("{} deleted in order and tracking detail db", searchId);
     }
 
+    //Admin ROLE: Delete Location by location id
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/locations/{locationId}")
     public void deleteLocation(@PathVariable Integer locationId){
         locationService.deleteLocation(locationService.getLocationById(locationId));
         log.info("{} deleted in order and tracking detail db", locationId);
     }
-
-
-//    @PutMapping("{username}")
-//    public ResponseEntity<User> changePw(@PathVariable String username){
-//        User user = userService.changePw(username);
-//        if (user.getId() != null){
-//            return ResponseEntity.status(HttpStatus.OK).body(user);
-//        }else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
 
 }
