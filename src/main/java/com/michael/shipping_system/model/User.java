@@ -1,7 +1,6 @@
 package com.michael.shipping_system.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -12,8 +11,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

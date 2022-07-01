@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class StaffController {
 
     private final TrackingService trackingService;
 
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @PostMapping("/pickup")
     public ResponseEntity<Order> pickedUp(@RequestBody Order order){
         Order target = trackingService.updatePickUp(order.getSearchId());
@@ -30,6 +32,7 @@ public class StaffController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @PostMapping("/processing")
     public ResponseEntity<Order> processing(@RequestBody Order order){
 
@@ -41,6 +44,7 @@ public class StaffController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @PostMapping("/deliveried")
     public ResponseEntity<Order> deliveried( @RequestBody Order order){
         Order target = trackingService.updateDeliveried(order.getSearchId());

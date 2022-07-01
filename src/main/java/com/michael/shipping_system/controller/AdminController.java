@@ -9,8 +9,10 @@ import com.michael.shipping_system.service.TrackingService;
 import com.michael.shipping_system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,12 +23,17 @@ import java.util.List;
 @Slf4j
 public class AdminController {
 
-    private final UserService userService;
-    private final TrackingService trackingService;
-    private final OrderService orderService;
-    private final LocationService locationService;
+    @Autowired
+    private  UserService userService;
+    @Autowired
+    private  TrackingService trackingService;
+    @Autowired
+    private  OrderService orderService;
+    @Autowired
+    private  LocationService locationService;
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/locations")
     public ResponseEntity <Location> addLocation(@RequestBody Location location) throws Exception{
         List<Location> locations = locationService.getAllLocation();
@@ -44,6 +51,7 @@ public class AdminController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUser(){
         List<User> users = userService.getAllUser();
@@ -55,7 +63,7 @@ public class AdminController {
     }
 
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> getAllOrder(){
         List<Order> orders = orderService.getAllOrders();
@@ -66,6 +74,7 @@ public class AdminController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/locations/{locationId}")
     public ResponseEntity <Location> getLocation(@PathVariable Integer locationId){
         Location location = locationService.getLocationById(locationId);
@@ -76,6 +85,7 @@ public class AdminController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/locations")
     public ResponseEntity <List<Location>> getAllLocation(){
         List<Location> locations = locationService.getAllLocation();
@@ -87,13 +97,14 @@ public class AdminController {
     }
 
 
-
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/users/{username}")
     public void deleteUser(@PathVariable String username){
         userService.deleteUser(username);
         log.info("{} deleted in db", username);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/orders/{searchId}")
     public void deleteOrder(@PathVariable String searchId){
         trackingService.deleteDetails(searchId);
@@ -101,10 +112,22 @@ public class AdminController {
         log.info("{} deleted in order and tracking detail db", searchId);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/locations/{locationId}")
     public void deleteLocation(@PathVariable Integer locationId){
         locationService.deleteLocation(locationService.getLocationById(locationId));
         log.info("{} deleted in order and tracking detail db", locationId);
     }
+
+
+//    @PutMapping("{username}")
+//    public ResponseEntity<User> changePw(@PathVariable String username){
+//        User user = userService.changePw(username);
+//        if (user.getId() != null){
+//            return ResponseEntity.status(HttpStatus.OK).body(user);
+//        }else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//    }
 
 }
