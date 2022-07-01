@@ -51,6 +51,18 @@ public class AdminController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("users/{username}")
+    public ResponseEntity<User> getUser(@PathVariable String username){
+        User user = userService.getUser(username);
+        log.info(user.getEmail());
+        if (user.getId() != null){
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUser(){

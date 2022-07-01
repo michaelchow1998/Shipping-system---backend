@@ -1,6 +1,7 @@
 package com.michael.shipping_system.controller;
 
 import com.michael.shipping_system.model.*;
+import com.michael.shipping_system.requestValid.RequestOrderCreate;
 import com.michael.shipping_system.service.OrderService;
 import com.michael.shipping_system.service.TrackingService;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -18,11 +21,27 @@ import java.util.List;
 @RequestMapping("api/v1/orders")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class OrderController {
 
     private final OrderService orderService;
 
     private final TrackingService trackingService;
+
+    @PostMapping("/shipping")
+    @PreAuthorize("hasAnyRole('ROLE_STAFF','ROLE_ADMIN')")
+    public ResponseEntity<?> shipping(@RequestBody @Valid RequestOrderCreate orderCreate) throws Exception{
+        try{
+            log.info("{}",orderCreate.getPickupLocationId());
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/orders/shipping").toUriString());
+            return ResponseEntity.created(uri).body(orderService.createOrder(orderCreate));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(e);
+        }
+
+    }
+
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @PostMapping("")
@@ -63,13 +82,6 @@ public class OrderController {
 
     }
 
-    @PostMapping("/shipping")
-    @PreAuthorize("hasAnyRole('ROLE_STAFF','ROLE_ADMIN')")
-    public ResponseEntity<Order> shipping(@RequestBody RequestOrderCreate orderCreate){
-        log.info("{}",orderCreate.getPickupLocationId());
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/orders/shipping").toUriString());
-        return ResponseEntity.created(uri).body(orderService.createOrder(orderCreate));
-    }
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @PostMapping("/sent")

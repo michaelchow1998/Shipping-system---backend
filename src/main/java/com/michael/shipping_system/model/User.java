@@ -1,5 +1,6 @@
 package com.michael.shipping_system.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class User {
     @Column(name = "username", nullable = false, length = 50)
     private String username;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false, length = 128)
     private String password;
 
@@ -41,6 +43,7 @@ public class User {
     @Column(name = "sex", nullable = false, length = 1)
     private Sex sex;
 
+    @JsonIgnore
     @Column(name = "role", nullable = false, length = 20)
     private String role;
 

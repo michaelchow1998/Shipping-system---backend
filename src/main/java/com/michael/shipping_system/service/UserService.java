@@ -2,6 +2,7 @@ package com.michael.shipping_system.service;
 
 import com.michael.shipping_system.model.User;
 import com.michael.shipping_system.repo.UserRepo;
+import com.michael.shipping_system.requestValid.RequestUserCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +55,21 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User register(User user) {
+    public User register(RequestUserCreate user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User regUser = new User();
+        regUser.setUsername(user.getUsername());
+        regUser.setPassword(user.getPassword());
+        regUser.setFirstName(user.getFirstName());
+        regUser.setLastName(user.getLastName());
+        regUser.setEmail(user.getEmail());
+        regUser.setPhone(user.getPhone());
+        regUser.setSex(user.getSex());
+        regUser.setRole("ROLE_USER");
         Date now = new Date();
-        user.setCreatedAt(now);
+        regUser.setCreatedAt(now);
         log.info("Saving new user {} {} to the db",user.getFirstName(),user.getLastName());
-        return userRepo.save(user);
+        return userRepo.save(regUser);
     }
 
     public User getUser(String username) {

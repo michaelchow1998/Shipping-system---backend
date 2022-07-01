@@ -4,6 +4,7 @@ import com.michael.shipping_system.model.*;
 import com.michael.shipping_system.repo.OrderRepo;
 import com.michael.shipping_system.repo.TrackingRepo;
 import com.michael.shipping_system.repo.UserRepo;
+import com.michael.shipping_system.requestValid.RequestOrderCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
