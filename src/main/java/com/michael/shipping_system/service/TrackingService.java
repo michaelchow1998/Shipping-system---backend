@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,16 +24,23 @@ public class TrackingService {
     private final OrderService orderService;
 
 
+    public void deleteDetails(String searchId){
+        trackingRepo.deleteBySearchId(searchId);
+    }
+
+    public TrackingDetails findDetails(String searchId){
+
+        return trackingRepo.findBySearchId(searchId);
+    }
 
     public Order updatePickUp(String searchId){
         Order order = orderService.searchBySearchId(searchId);
         if(order!=null){
-            Long orderId = order.getId();
-            TrackingDetails trackingDetails = trackingRepo.findByOrderId(orderId);
+            TrackingDetails trackingDetails = trackingRepo.findBySearchId(searchId);
             trackingDetails.setCurrentState(State.PICKUPED);
             trackingDetails.setPickedUp(true);
             trackingDetails.setProcessing(false);
-            trackingDetails.setDeliveried(false);
+            trackingDetails.setDelivered(false);
             trackingRepo.save(trackingDetails);
             return order;
         }else{
@@ -43,13 +52,13 @@ public class TrackingService {
 
     public Order updateProcessing(String searchId){
         Order order = orderService.searchBySearchId(searchId);
+        log.info("update order search id: {}",order.getSearchId());
         if(order!=null){
-            Long orderId = order.getId();
-            TrackingDetails trackingDetails = trackingRepo.findByOrderId(orderId);
+            TrackingDetails trackingDetails = trackingRepo.findBySearchId(searchId);
             trackingDetails.setCurrentState(State.PROCESSING);
             trackingDetails.setPickedUp(false);
             trackingDetails.setProcessing(true);
-            trackingDetails.setDeliveried(false);
+            trackingDetails.setDelivered(false);
             trackingRepo.save(trackingDetails);
             return order;
         }else{
@@ -62,16 +71,15 @@ public class TrackingService {
     public Order updateDeliveried(String searchId){
         Order order = orderService.searchBySearchId(searchId);
         if(order!=null){
-            Long orderId = order.getId();
-            TrackingDetails trackingDetails = trackingRepo.findByOrderId(orderId);
+            TrackingDetails trackingDetails = trackingRepo.findBySearchId(searchId);
             trackingDetails.setCurrentLocationId(order.getDeliveryLocationId());
             trackingDetails.setCurrentState(State.DELIVERIED);
             trackingDetails.setPickedUp(false);
             trackingDetails.setProcessing(false);
-            trackingDetails.setDeliveried(true);
+            trackingDetails.setDelivered(true);
             trackingRepo.save(trackingDetails);
             Date now = new Date();
-            order.setActualArrivalDate(now);
+            order.setActualArrivalTime(now);
             order.setFinished(true);
             orderService.saveOrder(order);
             return order;

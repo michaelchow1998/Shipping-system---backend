@@ -1,8 +1,6 @@
 package com.michael.shipping_system.controller;
 
-import com.michael.shipping_system.model.Order;
 import com.michael.shipping_system.model.User;
-import com.michael.shipping_system.service.OrderService;
 import com.michael.shipping_system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/user")

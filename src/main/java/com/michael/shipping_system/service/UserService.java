@@ -1,6 +1,5 @@
 package com.michael.shipping_system.service;
 
-import com.michael.shipping_system.model.Sex;
 import com.michael.shipping_system.model.User;
 import com.michael.shipping_system.repo.UserRepo;
 import lombok.RequiredArgsConstructor;

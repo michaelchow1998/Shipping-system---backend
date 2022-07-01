@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class RequestOrderCreate {
 
-    private Long sendUserId;
+    private Integer sendUserId;
 
-    private Long receiptUserId;
+    private Integer receiptUserId;
 
     private Integer pickupLocationId;
 

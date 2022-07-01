@@ -1,7 +1,6 @@
 package com.michael.shipping_system.controller;
 
 import com.michael.shipping_system.model.Order;
-import com.michael.shipping_system.service.OrderService;
 import com.michael.shipping_system.service.TrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,32 +20,32 @@ public class StaffController {
     private final TrackingService trackingService;
 
     @PostMapping("/pickup")
-    public ResponseEntity<Order> pickedUp(@RequestBody String searchId){
-        Order order = trackingService.updatePickUp(searchId);
+    public ResponseEntity<Order> pickedUp(@RequestBody Order order){
+        Order target = trackingService.updatePickUp(order.getSearchId());
 
-        if (order != null){
-            return ResponseEntity.status(HttpStatus.OK).body(order);
+        if (target != null){
+            return ResponseEntity.status(HttpStatus.OK).body(target);
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @PostMapping("/processing")
-    public ResponseEntity<Order> processing(@RequestBody String searchId){
-        Order order = trackingService.updateProcessing(searchId);
+    public ResponseEntity<Order> processing(@RequestBody Order order){
 
-        if (order != null){
-            return ResponseEntity.status(HttpStatus.OK).body(order);
+        Order target = trackingService.updateProcessing(order.getSearchId());
+        if (target != null){
+            return ResponseEntity.status(HttpStatus.OK).body(target);
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @PostMapping("/deliveried")
-    public ResponseEntity<Order> deliveried( @RequestBody String searchId){
-        Order order = trackingService.updateDeliveried(searchId);
-        if (order != null){
-            return ResponseEntity.status(HttpStatus.OK).body(order);
+    public ResponseEntity<Order> deliveried( @RequestBody Order order){
+        Order target = trackingService.updateDeliveried(order.getSearchId());
+        if (target != null){
+            return ResponseEntity.status(HttpStatus.OK).body(target);
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

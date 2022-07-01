@@ -1,7 +1,6 @@
 package com.michael.shipping_system.service;
 
 import com.michael.shipping_system.model.Location;
-import com.michael.shipping_system.model.User;
 import com.michael.shipping_system.repo.LocationRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,4 +24,8 @@ public class LocationService {
     public List<Location> getAllLocation(){
         return locationRepo.findAll();
     }
+
+    public void deleteLocation(Location location){ locationRepo.delete(location); }
+
+    public Location getLocationById(Integer id){return  locationRepo.findLocationById(id);}
 }

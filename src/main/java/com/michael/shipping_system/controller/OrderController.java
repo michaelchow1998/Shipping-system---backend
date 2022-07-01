@@ -1,9 +1,8 @@
 package com.michael.shipping_system.controller;
 
-import com.michael.shipping_system.model.Order;
-import com.michael.shipping_system.model.RequestOrderCreate;
+import com.michael.shipping_system.model.*;
 import com.michael.shipping_system.service.OrderService;
-import com.michael.shipping_system.service.UserService;
+import com.michael.shipping_system.service.TrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,9 +21,12 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("")
-    public ResponseEntity<List<Order>> searchAllOrdersRelated(@RequestBody String username){
-        List<Order> orders = orderService.searchAllOrdersRelated(username);
+    private final TrackingService trackingService;
+
+    @PostMapping("")
+    public ResponseEntity<List<Order>> searchAllOrdersRelated(@RequestBody User user){
+
+        List<Order> orders = orderService.searchAllOrdersRelated(user.getUsername());
 
         if (orders != null){
             return ResponseEntity.status(HttpStatus.OK).body(orders);
@@ -33,15 +35,28 @@ public class OrderController {
         }
     }
 
+    @PostMapping("/details")
+    public ResponseEntity<TrackingDetails> searchOrderDetail(@RequestBody TrackingDetails details){
+        log.info("getSearchId : {}", details.getSearchId());
+       TrackingDetails targetDetail = trackingService.findDetails(details.getSearchId());
+        if (targetDetail != null){
+            return ResponseEntity.status(HttpStatus.OK).body(targetDetail);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
+
     @PostMapping("/shipping")
     public ResponseEntity<Order> shipping(@RequestBody RequestOrderCreate orderCreate){
+        log.info("{}",orderCreate.getPickupLocationId());
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/orders/shipping").toUriString());
         return ResponseEntity.created(uri).body(orderService.createOrder(orderCreate));
     }
 
     @PostMapping("/sent")
-    public ResponseEntity<List<Order>> searchSendOrders(@RequestBody String username){
-        List<Order> sendOrders = orderService.searchSendOrders(username);
+    public ResponseEntity<List<Order>> searchSendOrders(@RequestBody User user){
+        List<Order> sendOrders = orderService.searchSendOrders(user.getUsername());
 
         if (sendOrders != null){
             return ResponseEntity.status(HttpStatus.OK).body(sendOrders);
@@ -51,8 +66,8 @@ public class OrderController {
     }
 
     @PostMapping("/receipted")
-    public ResponseEntity<List<Order>> searchReceiptOrders(@RequestBody String username){
-        List<Order> receiptOrders = orderService.searchReceiptOrders(username);
+    public ResponseEntity<List<Order>> searchReceiptOrders(@RequestBody User user){
+        List<Order> receiptOrders = orderService.searchReceiptOrders(user.getUsername());
 
         if (receiptOrders != null){
             return ResponseEntity.status(HttpStatus.OK).body(receiptOrders);
@@ -62,8 +77,8 @@ public class OrderController {
     }
 
     @PostMapping("/finished")
-    public ResponseEntity<List<Order>> searchAllFinishedOrdersRelated(@RequestBody String username){
-        List<Order> orders = orderService.searchAllFinishedOrdersRelated(username);
+    public ResponseEntity<List<Order>> searchAllFinishedOrdersRelated(@RequestBody User user){
+        List<Order> orders = orderService.searchAllFinishedOrdersRelated(user.getUsername());
 
         if (orders != null){
             return ResponseEntity.status(HttpStatus.OK).body(orders);
@@ -72,8 +87,8 @@ public class OrderController {
         }
     }
     @PostMapping("/unfinished")
-    public ResponseEntity<List<Order>> searchAllUnfinishedOrdersRelated(@RequestBody String username){
-        List<Order> orders = orderService.searchAllUnfinishedOrdersRelated(username);
+    public ResponseEntity<List<Order>> searchAllUnfinishedOrdersRelated(@RequestBody  User user){
+        List<Order> orders = orderService.searchAllUnfinishedOrdersRelated(user.getUsername());
 
         if (orders != null){
             return ResponseEntity.status(HttpStatus.OK).body(orders);

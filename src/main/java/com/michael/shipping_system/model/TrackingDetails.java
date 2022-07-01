@@ -1,35 +1,47 @@
 package com.michael.shipping_system.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "tarcking_details")
+@Table(name = "tracking_details")
+@Getter
+@Setter
 public class TrackingDetails {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-    @Column(name = "order_id")
-    private Long orderId;
+    @Column(name = "tracking_search_id")
+    @JsonProperty("search_id")
+    private String searchId;
 
-    @Column(name = "curent_location_id")
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "details")
+    private Order orders;
+
+    @Column(name = "current_location_id", nullable = false)
     private Integer currentLocationId;
 
-    @Column(name = "current_state")
+    @Column(name = "current_state", nullable = false, length = 10)
     private State currentState;
 
-    @Column(name = "pickuped")
-    private boolean pickedUp;
+    @Column(name = "picked_up", nullable = false)
+    private Boolean pickedUp = false;
 
-    private boolean processing;
+    @Column(name = "processing", nullable = false)
+    private Boolean processing = false;
 
-    private boolean deliveried;
+    @Column(name = "delivered", nullable = false)
+    private Boolean delivered = false;
+
+
+
 }

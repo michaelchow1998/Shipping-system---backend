@@ -1,58 +1,54 @@
 package com.michael.shipping_system.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "`orders`")
+@Table(name = "orders")
+@Getter
+@Setter
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "order_search_id", length = 255)
+    private String searchId;
+
+    @Column(name = "user_id" ,length = 254)
+    private String userId;
 
     @Column(name = "send_user_id")
-    private Long sendUserId;
+    private Integer sendUserId;
 
     @Column(name = "receipt_user_id")
-    private Long receiptUserId;
-
+    private Integer receiptUserId;
 
     @Column(name = "pickup_location_id")
     private Integer pickupLocationId;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pickup_location",referencedColumnName = "id")
-    private Location pickupLocation;
-
     @Column(name = "delivery_location_id")
     private Integer deliveryLocationId;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "delivery_location",referencedColumnName = "id")
-    private Location deliveryLocation;
-
-    @Column(name = "created_date")
+    @Column(name = "created_date", nullable = false)
     private Date createdDate;
 
     @Column(name = "expect_date")
     private Date expectDate;
 
-    @Column(name = "actual_arrival_date")
-    private Date actualArrivalDate;
+    @Column(name = "actual_arrival_time")
+    private Date actualArrivalTime;
 
-    @Column(name = "search_id")
-    private String searchId;
-
+    @Column(name = "finished")
     private Boolean finished;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="tracking_details_id", referencedColumnName="order_id")
-    private TrackingDetails tarckingDetails;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "details_id")
+    private TrackingDetails details;
+
 }
