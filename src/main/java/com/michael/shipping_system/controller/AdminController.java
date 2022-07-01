@@ -40,8 +40,9 @@ public class AdminController {
         List<Location> locations = locationService.getAllLocation();
         boolean contain = false;
         for (Location l : locations){
-            if(l.getName().equals(location.getName())){
+            if (l.getName().equals(location.getName())) {
                 contain = true;
+                break;
             }
         }
         if(contain){
