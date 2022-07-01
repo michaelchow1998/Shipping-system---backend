@@ -35,4 +35,7 @@ public class RequestUserCreate {
     @NotNull
     private Sex sex;
 
+    @NotNull
+    private String keyQuestionAns;
+
 }

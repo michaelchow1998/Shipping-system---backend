@@ -1,6 +1,7 @@
 package com.michael.shipping_system.controller;
 
 import com.michael.shipping_system.model.User;
+import com.michael.shipping_system.requestValid.RequestChangePw;
 import com.michael.shipping_system.requestValid.RequestUserCreate;
 import com.michael.shipping_system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,11 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.register(user));
     }
 
+    @PostMapping("/changepw")
+    public ResponseEntity<User> register(@RequestBody @Valid RequestChangePw request){
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user/register").toUriString());
+        return ResponseEntity.created(uri).body(userService.changePw(request));
+    }
 
 
 

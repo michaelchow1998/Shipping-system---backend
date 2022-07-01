@@ -50,5 +50,8 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
+    @JsonIgnore
+    @Column(name = "key_question_ans")
+    private String keyQuestionAns;
 
 }

@@ -2,6 +2,7 @@ package com.michael.shipping_system.service;
 
 import com.michael.shipping_system.model.User;
 import com.michael.shipping_system.repo.UserRepo;
+import com.michael.shipping_system.requestValid.RequestChangePw;
 import com.michael.shipping_system.requestValid.RequestUserCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +49,23 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),authorities);
     }
 
-    public User changePw(String username){
-        User user = userRepo.findByUsername(username);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepo.save(user);
-        return user;
+    public User changePw(RequestChangePw requestChangePw){
+        User targetUser = userRepo.findByUsername(requestChangePw.getUsername());
+        String requestUsername = requestChangePw.getUsername().trim();
+        String requestEmail = requestChangePw.getEmail().trim();
+        String keyQuestionAns = requestChangePw.getKeyQuestionAns().trim();
+
+        if(requestUsername.equals(targetUser.getUsername()) &&
+                requestEmail.equals(targetUser.getEmail()) &&
+                keyQuestionAns.equals(targetUser.getKeyQuestionAns())
+        ){
+            targetUser.setPassword(passwordEncoder.encode(requestChangePw.getNewPassword()));
+            userRepo.save(targetUser);
+            return targetUser;
+
+        }else {
+            throw new RuntimeException("Request information is not correct");
+        }
     }
 
     public User register(RequestUserCreate user) {
@@ -66,6 +79,7 @@ public class UserService implements UserDetailsService {
         regUser.setPhone(user.getPhone());
         regUser.setSex(user.getSex());
         regUser.setRole("ROLE_USER");
+        regUser.setKeyQuestionAns(user.getKeyQuestionAns());
         Date now = new Date();
         regUser.setCreatedAt(now);
         log.info("Saving new user {} {} to the db",user.getFirstName(),user.getLastName());
