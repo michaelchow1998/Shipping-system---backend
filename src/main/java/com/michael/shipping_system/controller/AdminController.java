@@ -118,7 +118,7 @@ public class AdminController {
     @DeleteMapping("/users/{username}")
     public void deleteUser(@PathVariable String username){
         userService.deleteUser(username);
-        log.info("{} deleted in db", username);
+        log.info("{} deleted in user db", username);
     }
 
     //Admin ROLE: Delete Order by search id
@@ -135,7 +135,7 @@ public class AdminController {
     @DeleteMapping("/locations/{locationId}")
     public void deleteLocation(@PathVariable Integer locationId){
         locationService.deleteLocation(locationService.getLocationById(locationId));
-        log.info("{} deleted in order and tracking detail db", locationId);
+        log.info("{} deleted in locationId db", locationId);
     }
 
 }

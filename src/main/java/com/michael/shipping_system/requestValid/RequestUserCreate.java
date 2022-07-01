@@ -1,5 +1,6 @@
 package com.michael.shipping_system.requestValid;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.michael.shipping_system.model.Sex;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +37,7 @@ public class RequestUserCreate {
     private Sex sex;
 
     @NotNull
+    @JsonProperty("ans")
     private String keyQuestionAns;
 
 }
