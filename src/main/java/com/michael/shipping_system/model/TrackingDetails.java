@@ -2,6 +2,7 @@ package com.michael.shipping_system.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.michael.shipping_system.Enum.State;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -13,14 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+
+
 
 @RestController
 @RequestMapping("api/v1/admin")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class AdminController {
 
     @Autowired
@@ -32,11 +37,10 @@ public class AdminController {
     @Autowired
     private  LocationService locationService;
 
-
     //Admin ROLE: CREATE location
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/locations")
-    public ResponseEntity <Location> addLocation(@RequestBody Location location) throws Exception{
+    public ResponseEntity <Location> addLocation(@RequestBody @Valid Location location) throws Exception{
         List<Location> locations = locationService.getAllLocation();
         boolean contain = false;
         for (Location l : locations){
@@ -117,7 +121,8 @@ public class AdminController {
     //Admin ROLE: Delete User by username
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/users/{username}")
-    public void deleteUser(@PathVariable String username){
+    public void deleteUser(
+            @PathVariable String username){
         userService.deleteUser(username);
         log.info("{} deleted in user db", username);
     }
@@ -125,7 +130,8 @@ public class AdminController {
     //Admin ROLE: Delete Order by search id
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/orders/{searchId}")
-    public void deleteOrder(@PathVariable String searchId){
+    public void deleteOrder(
+            @PathVariable String searchId){
         trackingService.deleteDetails(searchId);
         orderService.deleteOrder(searchId);
         log.info("{} deleted in order and tracking detail db", searchId);
@@ -134,7 +140,9 @@ public class AdminController {
     //Admin ROLE: Delete Location by location id
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/locations/{locationId}")
-    public void deleteLocation(@PathVariable Integer locationId){
+    public void deleteLocation(
+
+            @PathVariable Integer locationId){
         locationService.deleteLocation(locationService.getLocationById(locationId));
         log.info("{} deleted in locationId db", locationId);
     }

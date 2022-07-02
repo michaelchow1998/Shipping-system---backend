@@ -1,15 +1,10 @@
 package com.michael.shipping_system;
 
-import com.michael.shipping_system.model.Sex;
-import com.michael.shipping_system.model.User;
-import com.michael.shipping_system.service.UserService;
-import org.springframework.boot.CommandLineRunner;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.Date;
 
 @SpringBootApplication
 public class ShippingSystemApplication {
@@ -17,6 +12,7 @@ public class ShippingSystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(ShippingSystemApplication.class, args);
     }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

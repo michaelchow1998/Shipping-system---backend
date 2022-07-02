@@ -1,7 +1,7 @@
 package com.michael.shipping_system.service;
 
 import com.michael.shipping_system.model.Order;
-import com.michael.shipping_system.model.State;
+import com.michael.shipping_system.Enum.State;
 import com.michael.shipping_system.model.TrackingDetails;
 import com.michael.shipping_system.repo.TrackingRepo;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

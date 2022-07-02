@@ -1,7 +1,7 @@
 package com.michael.shipping_system.requestValid;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.michael.shipping_system.model.Sex;
+import com.michael.shipping_system.Enum.Sex;
 import lombok.Getter;
 import lombok.Setter;
 

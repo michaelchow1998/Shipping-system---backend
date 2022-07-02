@@ -1,14 +1,11 @@
 package com.michael.shipping_system.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.michael.shipping_system.Enum.Sex;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "user")
