@@ -33,6 +33,10 @@ public class OrderService {
        orderRepo.save(order);
         return order;
     }
+
+    public Boolean existsBySearchId(String searchId){
+        return orderRepo.existsBySearchId(searchId);
+    }
     public void deleteOrder(String searchId){
         orderRepo.deleteBySearchId(searchId);
     }

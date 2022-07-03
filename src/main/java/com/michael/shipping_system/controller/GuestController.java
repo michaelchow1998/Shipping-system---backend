@@ -77,4 +77,12 @@ public class GuestController {
         }
     }
 
+    @GetMapping("/orders/{searchID}/exists")
+    public ResponseEntity <Boolean> checkOrdersExist(@PathVariable String searchID){
+        Boolean exists = orderService.existsBySearchId(searchID);
+
+        return ResponseEntity.status(HttpStatus.OK).body(exists);
+
+    }
+
 }

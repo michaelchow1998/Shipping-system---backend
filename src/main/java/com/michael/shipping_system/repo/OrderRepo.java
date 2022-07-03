@@ -12,6 +12,7 @@ public interface OrderRepo extends PagingAndSortingRepository<Order,Integer> {
     boolean existsBySearchId(String searchId);
     Order findBySearchId(String searchId);
 
+
     void deleteBySearchId(String searchId );
     List<Order> findBySendUserIdOrderByCreatedDate (Integer sendUserId);
     List<Order> findByReceiptUserIdOrderByCreatedDate ( Integer receiptUserId);
