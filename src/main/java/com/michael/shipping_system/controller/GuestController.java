@@ -1,9 +1,11 @@
 package com.michael.shipping_system.controller;
 
+import com.michael.shipping_system.model.Location;
 import com.michael.shipping_system.model.Order;
 import com.michael.shipping_system.model.User;
 import com.michael.shipping_system.requestValid.RequestChangePw;
 import com.michael.shipping_system.requestValid.RequestUserCreate;
+import com.michael.shipping_system.service.LocationService;
 import com.michael.shipping_system.service.OrderService;
 import com.michael.shipping_system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/guest")
@@ -30,6 +34,9 @@ public class GuestController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private LocationService locationService;
 
     //ADD: User register
     @PostMapping("/register")
@@ -46,7 +53,7 @@ public class GuestController {
     }
 
 
-    //ROLE_STAFF AND ROLE_ADMIN: GET order by searchId
+    //GUEST: GET order by searchId
     @GetMapping("/orders/{searchId}")
     public ResponseEntity<Order> searchOrder(@PathVariable String searchId){
 
@@ -57,6 +64,17 @@ public class GuestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+    }
+
+    //GUEST: READ all Location information
+    @GetMapping("/locations")
+    public ResponseEntity <List<Location>> getAllLocation(){
+        List<Location> locations = locationService.getAllLocation();
+        if (locations != null){
+            return ResponseEntity.status(HttpStatus.OK).body(locations);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

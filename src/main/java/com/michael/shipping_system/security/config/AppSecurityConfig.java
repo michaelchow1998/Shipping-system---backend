@@ -17,6 +17,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -34,17 +39,36 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
+    String[] BypassLists = {
+            "/api/v1/login",
+            "/api/v1/token/refresh",
+            "/api/v1/guest/register",
+            "/api/v1/guest/changepw",
+            "/api/v1/guest/orders/**",
+            "/api/v1/guest/locations"
+    };
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthticationFilter customAuthticationFilter = new CustomAuthticationFilter(authenticationManagerBean());
         customAuthticationFilter.setFilterProcessesUrl("/api/v1/login");
+        http.cors().configurationSource(new CorsConfigurationSource() {
+                                            @Override
+                                            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                                                CorsConfiguration config = new CorsConfiguration();
+                                                config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                                                config.setAllowedOrigins(Collections.singletonList("https://shipsheep.netlify.app"));
+                                                config.setAllowedMethods(Collections.singletonList("*"));
+                                                config.setAllowCredentials(true);
+                                                config.setAllowedHeaders(Collections.singletonList("*"));
+                                                config.setMaxAge(3600L);
+                                                return config;
+                                            }
+                                        });
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers( "/api/v1/login","/api/v1/token/refresh",
-                "/api/v1/guest/register","/api/v1/guest/changepw",
-                "/api/v1/guest/orders/**"
-                ).permitAll();
+        http.authorizeRequests().antMatchers(BypassLists).permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -3,6 +3,7 @@ package com.michael.shipping_system.controller;
 import com.michael.shipping_system.model.Location;
 import com.michael.shipping_system.model.Order;
 import com.michael.shipping_system.model.User;
+import com.michael.shipping_system.requestValid.RequestChangeLocation;
 import com.michael.shipping_system.service.LocationService;
 import com.michael.shipping_system.service.OrderService;
 import com.michael.shipping_system.service.TrackingService;
@@ -117,6 +118,22 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    ////Admin ROLE: Update Location state by location id
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/locations/{locationId}")
+    public ResponseEntity<Location> updateLocationState(
+            @PathVariable Integer locationId,
+            @RequestBody RequestChangeLocation req
+
+    ){
+        Location location = locationService.updateLocationState( locationId , req );
+        log.info("{}",location.getName());
+        return ResponseEntity.status(HttpStatus.OK).body(location);
+
+    }
+
+
 
     //Admin ROLE: Delete User by username
     @PreAuthorize("hasRole('ROLE_ADMIN')")

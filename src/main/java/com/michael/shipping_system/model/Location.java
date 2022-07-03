@@ -1,6 +1,7 @@
 package com.michael.shipping_system.model;
 
 import com.michael.shipping_system.Enum.Area;
+import com.michael.shipping_system.Enum.LocationState;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,8 +24,11 @@ public class Location {
     @Column(name = "name", nullable = false)
     private String name;
 
-
     @NotNull
     @Column(name = "area", nullable = false, length = 3)
     private Area area;
+
+    @Column(name = "state", nullable = false, length = 10)
+    private LocationState state;
+
 }

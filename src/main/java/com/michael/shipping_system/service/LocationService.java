@@ -2,6 +2,7 @@ package com.michael.shipping_system.service;
 
 import com.michael.shipping_system.model.Location;
 import com.michael.shipping_system.repo.LocationRepo;
+import com.michael.shipping_system.requestValid.RequestChangeLocation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,12 @@ public class LocationService {
 
     public List<Location> getAllLocation(){
         return locationRepo.findAll();
+    }
+
+    public Location updateLocationState(Integer locationId, RequestChangeLocation req){
+        Location targetLocation = locationRepo.findLocationById(locationId);
+        targetLocation.setState(req.getState());
+        return locationRepo.save(targetLocation);
     }
 
     public void deleteLocation(Location location){ locationRepo.delete(location); }
