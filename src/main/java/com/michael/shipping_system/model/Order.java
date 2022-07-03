@@ -46,7 +46,6 @@ public class Order {
     @Column(name = "finished")
     private Boolean finished;
 
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "details_id")
     private TrackingDetails details;

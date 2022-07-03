@@ -20,7 +20,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/guest")
@@ -78,10 +80,12 @@ public class GuestController {
     }
 
     @GetMapping("/orders/{searchID}/exists")
-    public ResponseEntity <Boolean> checkOrdersExist(@PathVariable String searchID){
+    public ResponseEntity <Map<String,Object>> checkOrdersExist(@PathVariable String searchID){
+        HashMap<String, Object> map = new HashMap<>();
         Boolean exists = orderService.existsBySearchId(searchID);
-
-        return ResponseEntity.status(HttpStatus.OK).body(exists);
+        map.put("searchID", searchID);
+        map.put("exists", exists);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
 
     }
 

@@ -71,7 +71,7 @@ public class TrackingService {
         if(order!=null){
             TrackingDetails trackingDetails = trackingRepo.findBySearchId(searchId);
             trackingDetails.setCurrentLocationId(order.getDeliveryLocationId());
-            trackingDetails.setCurrentState(State.DELIVERIED);
+            trackingDetails.setCurrentState(State.DELIVERED);
             trackingDetails.setPickedUp(false);
             trackingDetails.setProcessing(false);
             trackingDetails.setDelivered(true);
