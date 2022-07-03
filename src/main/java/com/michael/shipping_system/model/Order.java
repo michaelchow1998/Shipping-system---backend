@@ -1,5 +1,6 @@
 package com.michael.shipping_system.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,12 +35,15 @@ public class Order {
     @Column(name = "delivery_location_id")
     private Integer deliveryLocationId;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_date", nullable = false)
     private Date createdDate;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "expect_date")
     private Date expectDate;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "actual_arrival_time")
     private Date actualArrivalTime;
 

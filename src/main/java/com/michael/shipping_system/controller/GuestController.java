@@ -4,6 +4,7 @@ import com.michael.shipping_system.model.Location;
 import com.michael.shipping_system.model.Order;
 import com.michael.shipping_system.model.User;
 import com.michael.shipping_system.requestValid.RequestChangePw;
+import com.michael.shipping_system.requestValid.RequestLocationsList;
 import com.michael.shipping_system.requestValid.RequestUserCreate;
 import com.michael.shipping_system.service.LocationService;
 import com.michael.shipping_system.service.OrderService;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +81,17 @@ public class GuestController {
         }
     }
 
+    @PostMapping("/locations")
+    public ResponseEntity <Map<String, String>> getLocationName(@RequestBody RequestLocationsList list){
+         List<Integer> data = new ArrayList<>();
+         data.add(list.getPickLocationId());
+         data.add(list.getDeliveryLocationId());
+
+         Map<String, String> names = locationService.getLocationName(data);
+
+            return ResponseEntity.status(HttpStatus.OK).body(names);
+    }
+
     @GetMapping("/orders/{searchID}/exists")
     public ResponseEntity <Map<String,Object>> checkOrdersExist(@PathVariable String searchID){
         HashMap<String, Object> map = new HashMap<>();
@@ -86,7 +99,6 @@ public class GuestController {
         map.put("searchID", searchID);
         map.put("exists", exists);
         return ResponseEntity.status(HttpStatus.OK).body(map);
-
     }
 
 }

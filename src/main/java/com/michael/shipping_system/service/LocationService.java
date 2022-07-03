@@ -8,7 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,15 @@ public class LocationService {
 
     public List<Location> getAllLocation(){
         return locationRepo.findAll();
+    }
+
+    public Map<String,String> getLocationName(List<Integer> locationList){
+        HashMap<String,String> names = new HashMap();
+        String pickupLocationName = locationRepo.findLocationById(locationList.get(0)).getName();
+        String delivered  = locationRepo.findLocationById(locationList.get(1)).getName();
+        names.put("pickUpName", pickupLocationName);
+        names.put("deliveryName", delivered);
+        return names;
     }
 
     public Location updateLocationState(Integer locationId, RequestChangeLocation req){
