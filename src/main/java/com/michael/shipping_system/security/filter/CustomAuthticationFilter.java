@@ -29,6 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthticationFilter extends UsernamePasswordAuthenticationFilter {
 
 
+
     private final AuthenticationManager authenticationManager;
     public  CustomAuthticationFilter(AuthenticationManager authenticationManager){
         this.authenticationManager =  authenticationManager;
