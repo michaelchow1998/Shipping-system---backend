@@ -12,6 +12,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000","https://shipsheep.netlify.app");
+                .allowedOrigins("http://localhost:3000","https://shipsheep.netlify.app")
+                .allowCredentials(false)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*");
+
     }
 }
