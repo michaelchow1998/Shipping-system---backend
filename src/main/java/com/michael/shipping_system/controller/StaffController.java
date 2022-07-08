@@ -45,7 +45,7 @@ public class StaffController {
     }
 
     //Staff ROLE: Update Order pick up state
-    @PreAuthorize("hasRole('ROLE_STAFF')")
+    @PreAuthorize("hasAnyRole('ROLE_STAFF','ROLE_ADMIN')")
     @PutMapping("/pickup")
     public ResponseEntity<Order> pickedUp(@RequestBody Order order){
         Order target = trackingService.updatePickUp(order.getSearchId());
@@ -58,7 +58,7 @@ public class StaffController {
     }
 
     //Staff ROLE: Update Order processing state
-    @PreAuthorize("hasRole('ROLE_STAFF')")
+    @PreAuthorize("hasAnyRole('ROLE_STAFF','ROLE_ADMIN')")
     @PutMapping("/processing")
     public ResponseEntity<Order> processing(@RequestBody Order order){
 
@@ -71,7 +71,7 @@ public class StaffController {
     }
 
     //Staff ROLE: Update Order delivery state
-    @PreAuthorize("hasRole('ROLE_STAFF')")
+    @PreAuthorize("hasAnyRole('ROLE_STAFF','ROLE_ADMIN')")
     @PutMapping("/delivered")
     public ResponseEntity<Order> deliveried( @RequestBody Order order){
         Order target = trackingService.updateDeliveried(order.getSearchId());
