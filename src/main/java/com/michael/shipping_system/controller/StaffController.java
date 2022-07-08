@@ -72,7 +72,7 @@ public class StaffController {
 
     //Staff ROLE: Update Order delivery state
     @PreAuthorize("hasRole('ROLE_STAFF')")
-    @PutMapping("/deliveried")
+    @PutMapping("/delivered")
     public ResponseEntity<Order> deliveried( @RequestBody Order order){
         Order target = trackingService.updateDeliveried(order.getSearchId());
         if (target != null){

@@ -40,6 +40,9 @@ public class TrackingService {
             trackingDetails.setProcessing(false);
             trackingDetails.setDelivered(false);
             trackingRepo.save(trackingDetails);
+            order.setFinished(false);
+            order.setActualArrivalTime(null);
+            orderService.saveOrder(order);
             return order;
         }else{
             log.error("TrackingService: can't find order by {}", searchId );
@@ -58,6 +61,9 @@ public class TrackingService {
             trackingDetails.setProcessing(true);
             trackingDetails.setDelivered(false);
             trackingRepo.save(trackingDetails);
+            order.setFinished(false);
+            order.setActualArrivalTime(null);
+            orderService.saveOrder(order);
             return order;
         }else{
             log.error("TrackingService: can't find order by {}", searchId );
