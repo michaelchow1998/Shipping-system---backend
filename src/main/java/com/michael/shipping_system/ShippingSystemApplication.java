@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class ShippingSystemApplication {
-
+//    ShipSheep_v1.0
     public static void main(String[] args) {
         SpringApplication.run(ShippingSystemApplication.class, args);
     }
