@@ -1,0 +1,12 @@
+server:
+    port: $PORT
+spring:
+    datasource:
+        password: s101033418
+        url: jdbc:mysql://localhost:3306/shipping?serverTimezone=Asia/Hong_Kong&characterEncoding=utf-8
+        username: root
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+    jpa:
+        show-sql: false
