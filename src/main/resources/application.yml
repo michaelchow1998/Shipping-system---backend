@@ -5,6 +5,9 @@ spring:
         password: s101033418
         url: jdbc:mysql://localhost:3306/shipping?serverTimezone=Asia/Hong_Kong&characterEncoding=utf-8
         username: root
+#        password: 09afdd16
+#        url: jdbc:mysql://b1368326b6b901:09afdd16@us-cdbr-east-06.cleardb.net/heroku_88033945fe27085?reconnect=true/shipping?serverTimezone=Asia/Hong_Kong&characterEncoding=utf-8
+#        username: b1368326b6b901
     jackson:
         date-format: yyyy-MM-dd HH:mm:ss
         time-zone: GMT+8
